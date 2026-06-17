@@ -30,7 +30,32 @@ function doPost(e) {
     'Pending'
   ]);
 
+  sendNotification_(data);
+
   return ContentService
     .createTextOutput(JSON.stringify({ result: 'ok' }))
     .setMimeType(ContentService.MimeType.JSON);
+}
+
+function sendNotification_(data) {
+  const subject = 'New Offsite Training Request — ' + (data.business || 'Unknown Account');
+  const body = [
+    'A new offsite barista training request was submitted.',
+    '',
+    'Business:   ' + (data.business      || '—'),
+    'Contact:    ' + (data.contact_name  || '—'),
+    'Email:      ' + (data.email         || '—'),
+    'Phone:      ' + (data.phone         || '—'),
+    'Address:    ' + [data.street, data.city, data.state, data.zip].filter(Boolean).join(', '),
+    'Seats:      ' + (data.seats         || '—'),
+    'Attendees:  ' + (data.attendees     || '—'),
+    'Timeslots:  ' + (data.timeslot_rank || '—'),
+    'Notes:      ' + (data.notes         || '—'),
+    '',
+    'Submitted:  ' + (data.submitted_at  || new Date().toLocaleString()),
+    '',
+    'View sheet: https://docs.google.com/spreadsheets/d/' + SHEET_ID,
+  ].join('\n');
+
+  MailApp.sendEmail('john.corredor@atomicroastery.com', subject, body);
 }
