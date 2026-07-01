@@ -57,5 +57,5 @@ function sendNotification_(data) {
     'View sheet: https://docs.google.com/spreadsheets/d/' + SHEET_ID,
   ].join('\n');
 
-  MailApp.sendEmail('john.corredor@atomicroastery.com', subject, body);
+  MailApp.sendEmail('jonathan@atomicroastery.com', subject, body);
 }
